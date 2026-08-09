@@ -1,7 +1,9 @@
+using ECommerce.Application.Common.Events;
 using ECommerce.Application.Data;
 using ECommerce.Application.Products.Commands;
 using ECommerce.Application.Products.Queries;
 using ECommerce.Infrastructure.Data;
+using MassTransit;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
@@ -15,6 +17,16 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseNpgsql(connectionString));
 
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(GetProductsQuery).Assembly));
+
+builder.Services.AddMassTransit(x =>
+{
+    x.UsingRabbitMq((context, cfg) =>
+    {
+        // Aspire automatically injects the RabbitMQ host address via connection string mapping
+        var rabbitUri = builder.Configuration.GetConnectionString("messaging");
+        cfg.Host(rabbitUri);
+    });
+});
 
 builder.Services.AddOpenApi();
 
@@ -56,12 +68,25 @@ app.MapGet("/api/products", async (ISender mediator, CancellationToken cancellat
 .WithName("GetProducts")
 .WithOpenApi();
 
-app.MapPost("/api/products/update-stock", async (UpdateProductStockCommand command, ISender mediator) =>
+app.MapPost("/api/products/checkout", async (Guid productId, int quantity, IPublishEndpoint publishEndpoint) =>
 {
-    var success = await mediator.Send(command);
-    return success ? Results.Ok(new { Message = "Stock updated successfully." }) : Results.BadRequest("Invalid request or insufficient stock.");
+    // Validation check: ensure they aren't purchasing a negative or zero quantity
+    if (quantity <= 0) return Results.BadRequest("Quantity purchased must be greater than zero.");
+
+    // 1. Instantly create our integration event data envelope
+    var integrationEvent = new OrderSubmittedEvent(productId, quantity);
+
+    // 2. Drop the envelope into the RabbitMQ message queue line (Takes less than 2 milliseconds!)
+    await publishEndpoint.Publish(integrationEvent);
+
+    // 3. Return a clean 202 Accepted status code to set enterprise expectations
+    return Results.Accepted(value: new
+    {
+        Message = "Order received and is now processing in the checkout queue pipeline.",
+        TargetProductId = productId
+    });
 })
-.WithName("UpdateStock")
+.WithName("CheckoutProduct")
 .WithOpenApi();
 
 // Basic placeholder health route

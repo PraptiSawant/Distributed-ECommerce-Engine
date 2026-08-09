@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.14.37411.7 d17.14
+VisualStudioVersion = 17.14.37411.7
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ECommerce.Domain", "ECommerce.Domain\ECommerce.Domain.csproj", "{3146EB53-C5DB-4397-9520-65AA253483DC}"
 EndProject
@@ -14,6 +14,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ModernECommerceEngine.AppHost", "ModernECommerceEngine.AppHost\ModernECommerceEngine.AppHost.csproj", "{EA773092-85A3-4C72-A4BF-3568B8E72A84}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ModernECommerceEngine.ServiceDefaults", "ModernECommerceEngine.ServiceDefaults\ModernECommerceEngine.ServiceDefaults.csproj", "{C1FF5D15-3CEA-B73F-4A32-6390E57FED56}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ECommerce.InventoryWorker", "ECommerce.InventoryWorker\ECommerce.InventoryWorker.csproj", "{0BDD016B-7FBF-D3FF-B2C1-BD645660C1F8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,6 +47,10 @@ Global
 		{C1FF5D15-3CEA-B73F-4A32-6390E57FED56}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C1FF5D15-3CEA-B73F-4A32-6390E57FED56}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C1FF5D15-3CEA-B73F-4A32-6390E57FED56}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0BDD016B-7FBF-D3FF-B2C1-BD645660C1F8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0BDD016B-7FBF-D3FF-B2C1-BD645660C1F8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0BDD016B-7FBF-D3FF-B2C1-BD645660C1F8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0BDD016B-7FBF-D3FF-B2C1-BD645660C1F8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
