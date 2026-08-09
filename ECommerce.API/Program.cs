@@ -1,4 +1,5 @@
 using ECommerce.Application.Data;
+using ECommerce.Application.Products.Commands;
 using ECommerce.Application.Products.Queries;
 using ECommerce.Infrastructure.Data;
 using MediatR;
@@ -53,6 +54,14 @@ app.MapGet("/api/products", async (ISender mediator, CancellationToken cancellat
     return result is not null ? Results.Ok(result) : Results.NotFound();
 })
 .WithName("GetProducts")
+.WithOpenApi();
+
+app.MapPost("/api/products/update-stock", async (UpdateProductStockCommand command, ISender mediator) =>
+{
+    var success = await mediator.Send(command);
+    return success ? Results.Ok(new { Message = "Stock updated successfully." }) : Results.BadRequest("Invalid request or insufficient stock.");
+})
+.WithName("UpdateStock")
 .WithOpenApi();
 
 // Basic placeholder health route
