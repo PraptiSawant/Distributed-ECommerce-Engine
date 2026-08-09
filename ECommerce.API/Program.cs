@@ -1,5 +1,7 @@
 using ECommerce.Application.Data;
+using ECommerce.Application.Products.Queries;
 using ECommerce.Infrastructure.Data;
+using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -10,6 +12,8 @@ builder.AddServiceDefaults();
 var connectionString = builder.Configuration.GetConnectionString("PostgreSQL");
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseNpgsql(connectionString));
+
+builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(GetProductsQuery).Assembly));
 
 builder.Services.AddOpenApi();
 
@@ -39,6 +43,17 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+// 5. Create the live product collection endpoint route
+app.MapGet("/api/products", async (ISender mediator, CancellationToken cancellationToken) =>
+{
+    var query = new GetProductsQuery();
+    var result = await mediator.Send(query, cancellationToken);
+
+    return result is not null ? Results.Ok(result) : Results.NotFound();
+})
+.WithName("GetProducts")
+.WithOpenApi();
 
 // Basic placeholder health route
 app.MapGet("/health", () => Results.Ok(new { Status = "Healthy", Engine = ".NET 9/10 Core" }));
