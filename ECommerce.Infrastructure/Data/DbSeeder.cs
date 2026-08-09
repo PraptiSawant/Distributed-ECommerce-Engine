@@ -1,4 +1,5 @@
-﻿using ECommerce.Domain.Entities;
+﻿using ECommerce.Application.Data;
+using ECommerce.Domain.Entities;
 using System.Net.Http.Json;
 
 namespace ECommerce.Infrastructure.Data;

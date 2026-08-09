@@ -1,3 +1,4 @@
+using ECommerce.Application.Data;
 using ECommerce.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 
