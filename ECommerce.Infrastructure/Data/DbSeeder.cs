@@ -18,7 +18,8 @@ public static class DbSeeder
         try
         {
             // 3. Fetch realistic mock store datasets
-            var response = await httpClient.GetFromJsonAsync<DummyJsonResponse>("https://dummyjson.com");
+            var response = await httpClient.GetFromJsonAsync<DummyJsonResponse>("https://dummyjson.com/products");
+            Console.WriteLine($"[DIAGNOSTIC] DummyJSON Raw Payload: {response}");
 
             if (response?.Products != null)
             {

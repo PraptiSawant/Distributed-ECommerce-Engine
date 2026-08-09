@@ -9,11 +9,12 @@
   <ItemGroup>
     <PackageReference Include="MediatR" Version="14.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.17" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.15" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.18" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\ECommerce.Infrastructure\ECommerce.Infrastructure.csproj" />
+    <ProjectReference Include="..\ModernECommerceEngine.ServiceDefaults\ModernECommerceEngine.ServiceDefaults.csproj" />
   </ItemGroup>
 
 </Project>
