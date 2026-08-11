@@ -1,6 +1,5 @@
 using ECommerce.Application.Common.Events;
 using ECommerce.Application.Data;
-using ECommerce.Application.Products.Commands;
 using ECommerce.Application.Products.Queries;
 using ECommerce.Infrastructure.Data;
 using MassTransit;
@@ -15,6 +14,10 @@ builder.AddServiceDefaults();
 var connectionString = builder.Configuration.GetConnectionString("PostgreSQL");
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseNpgsql(connectionString));
+
+builder.Services.AddCors(options => {
+    options.AddDefaultPolicy(policy => policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
+});
 
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(GetProductsQuery).Assembly));
 
@@ -31,6 +34,8 @@ builder.Services.AddMassTransit(x =>
 builder.Services.AddOpenApi();
 
 var app = builder.Build();
+
+app.UseCors();
 
 app.MapDefaultEndpoints();
 
@@ -67,6 +72,7 @@ app.MapGet("/api/products", async (ISender mediator, CancellationToken cancellat
 })
 .WithName("GetProducts")
 .WithOpenApi();
+
 
 app.MapPost("/api/products/checkout", async (Guid productId, int quantity, IPublishEndpoint publishEndpoint) =>
 {
