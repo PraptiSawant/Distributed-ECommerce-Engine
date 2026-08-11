@@ -16,19 +16,7 @@ This ecosystem is designed using Clean Architecture (Onion Architecture) pattern
 ## ⚡ The Concurrency Resolution Flow
 To completely eliminate database multi-user lockouts and "double-selling" race conditions under heavy load, the write pathway is fully decoupled from the database transaction stream using an asynchronous event-driven pipeline:
 
-[Blazor UI Client] ─── (HTTP POST /checkout) ───► [Minimal API Engine]
-                                                           │
-                                                   (Instantly Publishes)
-                                                           │
-                                                           ▼
-                                                [CloudAMQP Message Broker]
-                                                (Strict FIFO Queue Order)
-                                                           │
-                                                   (MassTransit Consumer)
-                                                           │
-                                                           ▼
-[Neon Serverless DB] ◄─── (Async Persistence) ─── [Inventory Worker Service]
-
+<img width="409" height="196" alt="{C025300B-67AC-410F-A1C2-2B119DC462EA}" src="https://github.com/user-attachments/assets/d9f25e57-0406-46b6-9a26-9ce9228b035e" />
 
    1. Non-Blocking Submission: When a user checks out an item, the API captures the request, instantly wraps it into an OrderSubmittedEvent envelope, and broadcasts it to a cloud broker queue.
    2. Immediate Response: The API returns a 202 Accepted response back to the client immediately (within 2 milliseconds), keeping web network threads completely unblocked.
@@ -48,15 +36,7 @@ To completely eliminate database multi-user lockouts and "double-selling" race c
 ------------------------------
 ## 📂 Project Directory Map
 
-📁 ModernCommerceEngine
- ├── ⚙️ ModernEcommerceEngine.AppHost         # Central .NET Aspire Orchestration & Dependency Injector
- ├── 📊 ModernEcommerceEngine.ServiceDefaults # Global telemetry, logging configurations, and health checks
- ├── 🌐 ECommerce.API                         # Thin entry API layer mapping endpoints & publishing messages
- ├── 🧠 ECommerce.Application                 # CQRS split logic models, MediatR handlers, and integration events
- ├── 💎 ECommerce.Domain                      # Core DDD entities containing private setters and encapsulation rules
- ├── 🧱 ECommerce.Infrastructure              # Data persistence configurations and remote cloud data seeder scripts
- ├── 🔀 ECommerce.InventoryWorker             # Background worker service processing MassTransit queue packets
- └── 🎨 ECommerce.UI                          # Blazor WebAssembly single-page application storefront catalog
+<img width="581" height="157" alt="{ADF42C71-15D3-4F39-942A-4D0E81E4DB0A}" src="https://github.com/user-attachments/assets/c71d8d70-e139-4d40-b752-9d1ba0b881bf" />
 
 ------------------------------
 ## 🚀 Local Installation & Getting Started
